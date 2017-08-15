@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.admin.mygreendaotest.adapter.ListViewAdapter;
@@ -14,33 +15,49 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText editText;
+    EditText etName;
 
-    String message;
+    EditText etAge;
+
+    EditText etInterests;
+
+    EditText etPhoneNumber;
 
     ListViewAdapter listViewAdapter;
+
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        editText = (EditText) findViewById(R.id.et_text);
-
+        etName = (EditText) findViewById(R.id.et_name);
+        etAge = (EditText) findViewById(R.id.et_age);
+        etInterests = (EditText) findViewById(R.id.et_interests);
+        etPhoneNumber = (EditText) findViewById(R.id.et_phoneNumber);
+        listView = (ListView) findViewById(R.id.list_data);
     }
 
     public void insert(View view) {
-        message = editText.getText().toString();
-        if (message.isEmpty()) {
-            Toast.makeText(this, "nothing", Toast.LENGTH_SHORT).show();
+        String name = etName.getText().toString();
+        String age = etAge.getText().toString();
+        String interests = etInterests.getText().toString();
+        String phoneNumber = etPhoneNumber.getText().toString();
+
+        if (name.isEmpty() || age.isEmpty() || interests.isEmpty() || phoneNumber.isEmpty()) {
+            Toast.makeText(this, "wrong!", Toast.LENGTH_SHORT).show();
             return;
         }
         User user = new User();
-        user.setName(message);
-        user.setAge(21);
-        user.setInterests("play basketball");
-        user.setPhoneNumber("12345678910");
+        user.setName(name);
+        user.setAge(Integer.valueOf(age));
+        user.setInterests(interests);
+        user.setPhoneNumber(phoneNumber);
         UserDbUtil.getInstance().insert(user);
-        editText.setText("");
+        etName.setText("");
+        etAge.setText("");
+        etInterests.setText("");
+        etPhoneNumber.setText("");
         Toast.makeText(this, "insert success!", Toast.LENGTH_SHORT).show();
     }
 
@@ -50,16 +67,21 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "nothing", Toast.LENGTH_SHORT).show();
             return;
         }
-        StringBuffer sb = new StringBuffer();
-        for (User user : userList) {
-            sb.append(user.getName() + " ");
-        }
-        editText.setText(sb.toString());
+//        StringBuffer sb = new StringBuffer();
+//        for (User user : userList) {
+//            sb.append(user.getName() + " ");
+//        }
+//        editText.setText(sb.toString());
+        listViewAdapter = new ListViewAdapter(userList);
+        listView.setAdapter(listViewAdapter);
         Toast.makeText(this, "query success!", Toast.LENGTH_SHORT).show();
     }
 
     public void clear(View view) {
-        editText.setText("");
+        etName.setText("");
+        etAge.setText("");
+        etInterests.setText("");
+        etPhoneNumber.setText("");
         Toast.makeText(this, "clear success", Toast.LENGTH_SHORT).show();
     }
 
