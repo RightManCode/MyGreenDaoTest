@@ -67,11 +67,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "nothing", Toast.LENGTH_SHORT).show();
             return;
         }
-//        StringBuffer sb = new StringBuffer();
-//        for (User user : userList) {
-//            sb.append(user.getName() + " ");
-//        }
-//        editText.setText(sb.toString());
+
         listViewAdapter = new ListViewAdapter(userList);
         listView.setAdapter(listViewAdapter);
         Toast.makeText(this, "query success!", Toast.LENGTH_SHORT).show();
